@@ -14,8 +14,6 @@ function importHandler(instance, resolve) {
       try {
         const result = JSON.parse(e.target.result);
         resolve(result);
-        const formatted = JSON.stringify(result, null, 2);
-        document.getElementById("result").innerText = formatted;
       } catch (e) {
         alert("Error loading database");
         instance.open();
