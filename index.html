@@ -21,7 +21,7 @@
   </head>
   <body>
     <div id="result"></div>
-    <!-- Modal Structure -->
+    <!-- Modal element for loading database -->
     <div id="modal1" class="modal">
       <div class="modal-content">
         <h5>Cargar una base de datos</h5>
@@ -48,6 +48,19 @@
         </button>
       </div>
     </div>
+
+    <div
+      class="fixed-action-btn tooltipped"
+      data-position="top"
+      data-tooltip="Descargar base de datos"
+      id="tooltipDownload"
+    >
+      <a class="btn-floating btn-large red">
+        <i class="large material-icons">get_app</i>
+      </a>
+    </div>
+    <!-- Download hidden link -->
+    <a id="downloadAnchorElem" style="display: none;"></a>
     <!-- Load JS for materialze -->
     <script src="js/materialize.min.js" charset="utf-8"></script>
     <!-- Load custom js -->

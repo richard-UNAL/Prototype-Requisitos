@@ -27,12 +27,13 @@ function importHandler(instance, resolve) {
   };
 }
 
-function main() {
+async function main() {
   M.AutoInit();
   // Opens the modal window
   const elems = document.querySelectorAll(".modal");
   const instance = M.Modal.getInstance(elems[0]);
   instance.open();
+
   let resolve;
   const promise = new Promise((_resolve) => {
     resolve = _resolve;
@@ -43,7 +44,15 @@ function main() {
     resolve
   );
   promise.then((loadedDatabase) => {
-      console.log(loadedDatabase);
+    document.getElementById("tooltipDownload").onclick = () => {
+      let dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(loadedDatabase));
+      let dlAnchorElem = document.getElementById("downloadAnchorElem");
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "database.json");
+      dlAnchorElem.click();
+    };
   });
 }
 
