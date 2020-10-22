@@ -25,7 +25,19 @@ function importHandler(instance, resolve) {
   };
 }
 
-async function main() {
+function downloadButton(database) {
+  return () => {
+    const dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(database));
+    const dlAnchorElem = document.getElementById("downloadAnchorElem");
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "database.json");
+    dlAnchorElem.click();
+  };
+}
+
+function main() {
   M.AutoInit();
   // Opens the modal window
   const elems = document.querySelectorAll(".modal");
@@ -41,17 +53,14 @@ async function main() {
     instance,
     resolve
   );
+
   promise.then((loadedDatabase) => {
-    document.getElementById("tooltipDownload").onclick = () => {
-      let dataStr =
-        "data:text/json;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(loadedDatabase));
-      let dlAnchorElem = document.getElementById("downloadAnchorElem");
-      dlAnchorElem.setAttribute("href", dataStr);
-      dlAnchorElem.setAttribute("download", "database.json");
-      dlAnchorElem.click();
-    };
+    localStorage.setItem("database", JSON.stringify(loadedDatabase));
   });
+
+  document.getElementById("tooltipDownload").onclick = downloadButton(
+    JSON.parse(localStorage.getItem("database"))
+  );
 }
 
 document.addEventListener("DOMContentLoaded", main);
