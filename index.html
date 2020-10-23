@@ -19,31 +19,22 @@
       media="all"
     />
     <!-- Import custom style -->
-    <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="./css/style.css" type="text/css" media="all" />
   </head>
   <body>
     <!-- Start modal element for loading database -->
-    <div id="modal1" class="modal">
+    <div id="modal2" class="modal">
       <div class="modal-content">
-        <h5>Cargar una base de datos</h5>
+        <h5 id="modal-title"></h5>
         <!-- Form to upload database -->
-        <p>Seleccione la base de datos a cargar</p>
-        <form action="#">
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>Archivo</span>
-              <input type="file" id="database-loader" />
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" />
-            </div>
-          </div>
+        <p id="modal-paragraph"></p>
+        <form id="modal-form" action="#">
         </form>
       </div>
       <div class="modal-footer">
         <button
           class="modal-close waves-effect waves-blue btn-flat"
-          id="importBtn"
+          id="modal-button"
         >
           Import
         </button>
@@ -6384,6 +6375,8 @@
           pointer-events="all"
         />
         <rect
+          id="program_manager_registers"
+          class="clickable"
           x="151"
           y="996"
           width="120"
@@ -6886,7 +6879,8 @@
           pointer-events="all"
         />
         <rect
-          id="teacher_asignss_quiz"
+          id="teacher_asigns_quiz"
+          class="clickable"
           x="851"
           y="1045"
           width="120"
@@ -15105,20 +15099,7 @@
           </switch>
         </g>
       </g>
-      <switch>
-        <g
-          requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-        />
-        <a
-          transform="translate(0,-5)"
-          xlink:href="https://desk.draw.io/support/solutions/articles/16000042487"
-          target="_blank"
-        >
-          <text text-anchor="middle" font-size="10px" x="50%" y="100%">
-            Viewer does not support full SVG 1.1
-          </text>
-        </a>
-      </switch>
+      <switch></switch>
     </svg>
     <!-- <embed type="image/svg+xml" src="ep.svg" /> -->
     <!-- End load ep -->
@@ -15135,6 +15116,35 @@
       </a>
     </div>
     <!-- End floating button -->
+
+    <!-- Modal for data entry -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h5>Cargar una base de datos</h5>
+        <!-- Form to upload database -->
+        <p>Seleccione la base de datos a cargar</p>
+        <form action="#">
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>Archivo</span>
+              <input type="file" id="database-loader" />
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="modal-close waves-effect waves-blue btn-flat"
+          id="importBtn"
+        >
+          Import
+        </button>
+      </div>
+    </div>
+    <!-- End Modal for data entry -->
 
     <!-- Download hidden link -->
     <a id="downloadAnchorElem" style="display: none;"></a>
