@@ -1,3 +1,17 @@
+
+function getSource({ data, value, display }) {
+  const database = JSON.parse(localStorage.getItem("database"));
+  const dataRetrival = database[data];
+  const result = [];
+  for (let i = 0; i < dataRetrival.length; i++) {
+    result.push({
+      value: dataRetrival[i][value],
+      text: dataRetrival[i][display],
+    });
+  }
+  return result;
+}
+
 // Handler for the import button
 function importHandler(instance, resolve) {
   return () => {
@@ -38,7 +52,7 @@ function downloadButton() {
   };
 }
 
-function insertClick(listDynamic) {
+function addClickInput(listDynamic) {
   for (let i = 0; i < listDynamic.length; i++) {
     triadaDinamica = listDynamic[i];
     const triada = document.getElementById(triadaDinamica.id);
@@ -48,48 +62,106 @@ function insertClick(listDynamic) {
       const paragraph = document.getElementById("modal-paragraph");
       const modalForm = document.getElementById("modal-form");
       const buttonForm = document.getElementById("modal-button");
+      // Title
       title.innerHTML = triadaDinamica.title;
+      // Paragraph
       paragraph.innerHTML = triadaDinamica.paragraph;
+      // Empty the inner html
       modalForm.innerHTML = "";
 
       for (let j = 0; j < triadaDinamica.fields.length; j++) {
         const field = triadaDinamica.fields[j];
+        if (field.type === TYPE.text) {
+          // Create a <div> node
+          const div = document.createElement("div");
+          div.className = "input-field col s6";
 
-        // Create a <div> node
-        const div = document.createElement("div");
-        div.className = "input-field col s6";
+          // <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+          const input = document.createElement("input");
+          input.id = field.id;
+          input.type = "text";
+          input.class = "validate";
 
-        // <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-        const input = document.createElement("input");
-        input.id = field.id;
-        input.type = "text";
-        input.class = "validate";
+          // <label for="first_name">First Name</label>
+          const label = document.createElement("label");
+          label.for = field.id;
+          label.innerHTML = field.label;
 
-        // <label for="first_name">First Name</label>
-        const label = document.createElement("label");
-        label.for = field.id;
-        label.innerHTML = field.label;
+          div.appendChild(input);
+          div.appendChild(label);
 
-        div.appendChild(input);
-        div.appendChild(label);
+          modalForm.appendChild(div);
+        } else if (field.type === TYPE.select) {
+          console.log("Select");
+          // Create a <div> node
+          const div = document.createElement("div");
+          div.className = "input-field col s6";
 
-        modalForm.appendChild(div);
+          const select = document.createElement("select");
+
+          const optionList = getSource(field.source);
+          for (let option = 0; option < optionList.length; option++) {
+            iterOption = optionList[option];
+            const optionElem = document.createElement("option");
+            optionElem.value = iterOption["value"];
+            optionElem.innerText = iterOption["text"];
+            optionElem.id = iterOption["value"];
+            select.appendChild(optionElem);
+          }
+          // <label for="first_name">First Name</label>
+          const label = document.createElement("label");
+          label.for = field.id;
+          label.innerHTML = field.label;
+
+          div.appendChild(select);
+          div.appendChild(label);
+          modalForm.appendChild(div);
+          M.FormSelect.init(select, {});
+        }
       }
 
       buttonForm.onclick = () => {
-        const inputs = document.querySelectorAll("#modal-form>div>input");
+        const forms = document.querySelector("#modal-form");
+        const inputs = forms.querySelectorAll("input");
         const database = JSON.parse(localStorage.getItem("database"));
-        console.log(inputs);
-        for (let k = 0, len = inputs.length; k < len; k++) {
+        const object = {};
+        for (let k = 0, len = triadaDinamica.fields.length; k < len; k++) {
           const userInput = inputs[k].value;
-          database[`data_entered${k}`] = userInput;
+          object[triadaDinamica.fields[k].id] = userInput;
         }
+        let datumElement = database[triadaDinamica.destination]; // Get the first input
+        if (Array.isArray(datumElement)) {
+          datumElement.push(object);
+        } else {
+          datumElement = object;
+        }
+        database[triadaDinamica.destination] = datumElement;
         localStorage.setItem("database", JSON.stringify(database));
       };
+      // Add text to button
+      buttonForm.innerText = triadaDinamica.button;
 
       const instance = M.Modal.getInstance(modal);
       instance.open();
     };
+  }
+}
+
+function displayUseCases(listUseCases) {
+  for (let i = 0; i < listUseCases.length; i++) {
+    const useCase = listUseCases[i];
+    const modal = document.getElementById("modal3");
+    const title = document.getElementById("modal-image-title");
+    const par = document.getElementById("model-image-paragraph");
+    const img = document.getElementById("model-image-img");
+
+    console.log(useCase);
+
+    title.innerHTML = " some title";
+    par.innerHTML = "some paragraph";
+    img.src = "http://www.wallpapers76.com/photo/7551/Cute-Cats-063.jpg";
+    const instance = M.Modal.getInstance(modal);
+    instance.open();
   }
 }
 
@@ -116,25 +188,9 @@ function main() {
 
   document.getElementById("tooltipDownload").onclick = downloadButton();
 
-  const epIds = [
-    {
-      id: "teacher_asigns_quiz",
-      title: "Teacher assigns quiz",
-      paragraph: "teacher assigns a quiz",
-      fields: [{ id: "quiz", label: "Quiz" }],
-    },
-    {
-      id: "program_manager_registers",
-      title: "Program manager registers",
-      paragraph: "program manager register",
-      fields: [
-        { id: "manager", label: "Manager" },
-        { id: "manager2", label: "Manager2" },
-      ],
-    },
-  ];
 
-  insertClick(epIds);
+  addClickInput(epIds);
+  displayUseCases([]);
 }
 
 document.addEventListener("DOMContentLoaded", main);
