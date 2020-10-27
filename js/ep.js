@@ -3,6 +3,11 @@ const FIELD_TYPE = {
   select: "SELECT",
 };
 
+const MESSAGE_TYPE = {
+    input: "INPUT",
+    modify: "MODIFY"
+}
+
 const epIds = [
   {
     id: "teacher_creates_question",
@@ -10,6 +15,7 @@ const epIds = [
     paragraph: "Create a new Question",
     button: "Create",
     destination: "questions",
+    input: MESSAGE_TYPE.input,
     fields: [
       {
         id: "predicate",
@@ -43,6 +49,9 @@ const epIds = [
     title: "Modifies questions",
     paragraph: "Modifies an existing question",
     button: "Modify",
+    input: MESSAGE_TYPE.modify,
+    destination: "questions",
+    destination_value: "id",
     fields: [
       {
         id: "predicate",
